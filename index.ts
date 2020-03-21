@@ -221,3 +221,25 @@ class LineArcStepIndicator {
         this.curr.startUpdating(cb)
     }
 }
+
+class Renderer {
+
+    lasi : LineArcStepIndicator = new LineArcStepIndicator()
+    animator : Animator = new Animator()
+
+    render(context : CanvasRenderingContext2D) {
+        this.lasi.draw(context)
+    }
+
+    handleTap(cb : Function) {
+        this.lasi.startUpdating(() => {
+            this.animator.start(() => {
+                cb()
+                this.lasi.update(() => {
+                    this.animator.stop()
+                    cb()
+                })
+            })
+        })
+    }
+}
