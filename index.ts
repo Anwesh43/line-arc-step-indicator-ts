@@ -1,6 +1,6 @@
 const w : number = window.innerWidth
-const h : number = window.innerWidth
-const scGap : number = 0.02
+const h : number = window.innerHeight
+const scGap : number = 0.02 / 6
 const strokeFactor : number = 90
 const sizeFactor : number = 2.9
 const foreColor : string = "#4a148c"
@@ -35,7 +35,7 @@ class DrawingUtil {
 
     static drawArc(context : CanvasRenderingContext2D, r : number, start : number, deg : number) {
         context.save()
-        context.rotate(deg * Math.PI / 180)
+        context.rotate(start * Math.PI / 180)
         context.beginPath()
         for (var i = 0; i < deg; i++) {
             const x : number = r * Math.cos(i * Math.PI / 180)
@@ -54,9 +54,12 @@ class DrawingUtil {
         const gap : number = 2 * size / arcs
         const sc : number = ScaleUtil.divideScale(scale, i, arcs)
         const sf : number = ScaleUtil.sinify(sc)
+        if (sc == 0) {
+            return
+        }
         const x : number = size - i * gap
         const deg : number = 360 / arcs
-        DrawingUtil.drawLine(context, x, 0, x - size * sc, 0)
+        DrawingUtil.drawLine(context, x, 0, x - gap * sc, 0)
         DrawingUtil.drawArc(context, size, i * deg, deg * sf)
     }
 
